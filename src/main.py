@@ -38,3 +38,4 @@ try:
         gpio.set_servo_pulsewidth(servopins[1], value_to_pwm(outgauge[6], maxrpm, False))
 finally:
     sock.close()
+    gpio.stop()
