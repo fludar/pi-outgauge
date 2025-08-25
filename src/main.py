@@ -10,7 +10,7 @@ maxspeed = 56 #m/s
 servopins = [14, 15]
 
 sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-sock.bind(('127.0.0.1', PORT))
+sock.bind(('0.0.0.0', PORT))
 
 print("[Server] Started on port ", PORT)
 
