@@ -9,17 +9,17 @@ def value_to_pwm(value, maxvalue, inverted=False):
 
 maxrpm = 5000
 maxspeed = 56 #m/s
-while True:
-    data = sock.recv(256)
+try:
+    while True:
+        data = sock.recv(256)
+        outgauge = struct.unpack('I4sHBBfffffffIIfff16s16sxxxx', data)
+        if outgauge[6] > maxrpm:
+            maxrpm = outgauge[6]
+        if outgauge[5] > maxspeed:
+            maxspeed = outgauge[5]
 
-    outgauge = struct.unpack('I4sHBBfffffffIIfff16s16sxxxx', data)
-    if outgauge[6] > maxrpm:
-        maxrpm = outgauge[6]
-    if outgauge[5] > maxspeed:
-        maxspeed = outgauge[5]
-
-    print("RPM: ", outgauge[6])
-    print("Speed: ", str(outgauge[5]))
-    print(value_to_pwm(outgauge[6], maxrpm, True))
-
-sock.close()
+        print("RPM: ", outgauge[6])
+        print("Speed: ", str(outgauge[5]))
+        print(value_to_pwm(outgauge[6], maxrpm, True))
+finally:
+    sock.close()
