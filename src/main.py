@@ -34,8 +34,12 @@ try:
             maxrpm = outgauge[6]
         if outgauge[5] > maxspeed:
             maxspeed = outgauge[5]
-        gpio.set_servo_pulsewidth(servopins[0], value_to_pwm(outgauge[5], maxspeed, False)) 
-        gpio.set_servo_pulsewidth(servopins[1], value_to_pwm(outgauge[6], maxrpm, False))
+        gpio.set_servo_pulsewidth(servopins[0], value_to_pwm(outgauge[5], maxspeed, True)) 
+        gpio.set_servo_pulsewidth(servopins[1], value_to_pwm(outgauge[6], maxrpm, True))
+        highbeam = bool(outgauge[13] & (1 << 1))
+        if highbeam: #todo: add an actual recalibration algorithm (eg. for changing cars/downshifts that overrev the car etc)
+            maxrpm = 5000
+        
 finally:
     sock.close()
     gpio.stop()
