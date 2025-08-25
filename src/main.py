@@ -7,7 +7,7 @@ import time
 PORT = 4444
 maxrpm = 5000
 maxspeed = 56 #m/s
-servopins = [14, 15]
+servopins = [17, 18]
 
 sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
 sock.bind(('0.0.0.0', PORT))
