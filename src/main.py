@@ -1,14 +1,31 @@
 import socket
 import struct
+import pigpio
+import subprocess
+import time 
+
+PORT = 4444
+maxrpm = 5000
+maxspeed = 56 #m/s
+servopins = [14, 15]
 
 sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-sock.bind(('127.0.0.1', 4444))
+sock.bind(('127.0.0.1', PORT))
+
+print("[Server] Started on port ", PORT)
+
+try:
+    subprocess.check_output(["pgrep", "pigpiod"])
+except subprocess.CalledProcessError:
+    print("[Daemon] PIGPIOD isn't running. Trying to start it now.")
+    subprocess.Popen(["sudo", "pigpiod"])
+    time.sleep(1)
 
 def value_to_pwm(value, maxvalue, inverted=False):
     return max(500, min(2500, (2500 - value * 2000 / maxvalue) if inverted else (500 + value * 2000 / maxvalue))) #this ensures the value is between 500 and 2500 us
 
-maxrpm = 5000
-maxspeed = 56 #m/s
+gpio = pigpio.pi()
+
 try:
     while True:
         data = sock.recv(256)
