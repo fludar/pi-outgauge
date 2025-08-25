@@ -34,9 +34,7 @@ try:
             maxrpm = outgauge[6]
         if outgauge[5] > maxspeed:
             maxspeed = outgauge[5]
-
-        print("RPM: ", outgauge[6])
-        print("Speed: ", str(outgauge[5]))
-        print(value_to_pwm(outgauge[6], maxrpm, True))
+        gpio.set_servo_pulsewidth(servopins[0], value_to_pwm(outgauge[5], maxspeed, False)) 
+        gpio.set_servo_pulsewidth(servopins[1], value_to_pwm(outgauge[6], maxrpm, False))
 finally:
     sock.close()
